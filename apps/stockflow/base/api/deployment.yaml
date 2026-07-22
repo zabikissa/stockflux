@@ -17,7 +17,8 @@ spec:
     spec:
       containers:
         - name: stockflow-api
-          image: srv2:5000/stockflow/api:1.0.0 
+          image: stockflow-api:1.0.1
+          imagePullPolicy: IfNotPresent   
 
           ports:
             - containerPort: 8080
