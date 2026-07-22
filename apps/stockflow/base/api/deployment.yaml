@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: stockflow-api
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: stockflow-api
+
+  template:
+    metadata:
+      labels:
+        app: stockflow-api
+
+    spec:
+      containers:
+        - name: stockflow-api
+          image: srv2:5000/stockflow/api:1.0.0 
+
+          ports:
+            - containerPort: 8080
+              name: http
+
+          envFrom:
+            - configMapRef:
+                name: stockflow-api-config
+
+            - secretRef:
+                name: stockflow-api-secret
+
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
+
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 15
+            periodSeconds: 20
+
